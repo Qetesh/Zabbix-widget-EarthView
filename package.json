@@ -1,0 +1,13 @@
+{
+  "name": "earthview",
+  "version": "1.0.0",
+  "description": "A Zabbix Earth View widget powered by COBE.",
+  "scripts": {
+    "build:cobe": "node scripts/build-cobe.js"
+  },
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cobe": "^2.0.1"
+  }
+}

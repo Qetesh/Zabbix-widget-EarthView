@@ -1,0 +1,38 @@
+{
+	"manifest_version": 2.0,
+	"id": "earth_view",
+	"type": "widget",
+	"name": "Earth View",
+	"namespace": "EarthView",
+	"version": "1.0",
+	"author": "Zabbix",
+	"description": "Displays hosts as markers on a 3D globe.",
+	"widget": {
+		"js_class": "CWidgetEarthView",
+		"in": {
+			"hostids": {
+				"type": "_hostids"
+			},
+			"groupids": {
+				"type": "_hostgroupids"
+			}
+		},
+		"out": [
+			{
+				"type": "_hostid"
+			},
+			{
+				"type": "_hostids"
+			}
+		]
+	},
+	"actions": {
+		"widget.earth_view.view": {
+			"class": "WidgetView"
+		}
+	},
+	"assets": {
+		"css": ["widget.css"],
+		"js": ["cobe.js", "class.widget.js"]
+	}
+}

@@ -1,0 +1,109 @@
+div.dashboard-widget-earth_view {
+	position: relative;
+	padding: 0;
+	overflow: hidden;
+}
+
+.earth-view-container {
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+}
+
+.earth-view-canvas {
+	display: block;
+	cursor: grab;
+	border-radius: 50%;
+	touch-action: none;
+	user-select: none;
+}
+
+.earth-view-canvas:active {
+	cursor: grabbing;
+}
+
+.earth-view-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	overflow: hidden;
+}
+
+.earth-view-marker {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	pointer-events: auto;
+	cursor: pointer;
+	transition: transform 0.15s ease;
+	z-index: 1;
+}
+
+.earth-view-marker:hover {
+	transform: translate(-50%, -50%) scale(1.03);
+	z-index: 10;
+}
+
+.earth-view-marker.selected {
+	transform: translate(-50%, -50%) scale(1.06);
+	z-index: 20;
+}
+
+.earth-view-marker-label {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	background: rgba(17, 24, 39, 0.78);
+	color: #fff;
+	font-size: 11px;
+	line-height: 1.2;
+	padding: 4px 9px;
+	border-radius: 999px;
+	white-space: nowrap;
+	max-width: 220px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+}
+
+.earth-view-container.earth-view-theme-dark .earth-view-marker-label {
+	background: rgba(17, 24, 39, 0.78);
+	color: #fff;
+	border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.earth-view-container.earth-view-theme-light .earth-view-marker-label {
+	background: rgba(255, 255, 255, 0.94);
+	color: #1f2937;
+	border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.earth-view-marker-status {
+	display: inline-block;
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	flex: 0 0 auto;
+	box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.earth-view-container.earth-view-theme-light .earth-view-marker-status {
+	box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.15);
+}
+
+.earth-view-marker-text {
+	display: inline-block;
+	min-width: 0;
+}
+
+.earth-view-hintbox {
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.dashboard-grid-widget-hidden-header div.dashboard-widget-earth_view {
+	padding-top: 0;
+}
