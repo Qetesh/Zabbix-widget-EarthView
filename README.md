@@ -7,6 +7,9 @@ It uses host inventory coordinates (`location_lat`, `location_lon`) and renders 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/f18bfb2d-a063-46f8-a7e1-1f16a2c3a9ec" alt="Zabbix 3D Globe Widget Demo" width="600">
 </p>
+<p align="center">
+  <em>Earth View demo showing rotation and host status markers.</em>
+</p>
 
 ## Features
 
