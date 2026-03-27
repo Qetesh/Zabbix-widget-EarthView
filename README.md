@@ -4,6 +4,10 @@
 
 It uses host inventory coordinates (`location_lat`, `location_lon`) and renders them with a locally bundled copy of [COBE](https://github.com/shuding/cobe), so the widget can run as a self-contained Zabbix module without external CDN dependencies.
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f18bfb2d-a063-46f8-a7e1-1f16a2c3a9ec" alt="Zabbix 3D Globe Widget Demo" width="600">
+</p>
+
 ## Features
 
 - Interactive 3D globe widget for Zabbix dashboards
@@ -17,7 +21,7 @@ It uses host inventory coordinates (`location_lat`, `location_lon`) and renders 
 
 ## Requirements
 
-- Zabbix 7.4.x
+- Tested with Zabbix 7.4.x
 - Hosts must have valid inventory coordinates:
   - `location_lat`
   - `location_lon`
@@ -119,20 +123,6 @@ This script:
 - Theme switching recreates the globe instance to keep visual output consistent across light and dark modes.
 - Marker labels are DOM elements layered on top of the globe, while the globe markers themselves are rendered by COBE.
 
-## Publishing Checklist
-
-Before publishing to GitHub, review:
-
-- module version in `manifest.json`
-- author and package metadata in `package.json`
-- top-level `LICENSE` file
-- screenshots or demo GIFs if you want a nicer project page
-
 ## License
 
-This repository currently does not include a top-level `LICENSE` file.
-
-If you plan to publish it, add an explicit license that matches your intended distribution model. Also review third-party and upstream code obligations, especially for:
-
-- Zabbix-derived module files
-- COBE (`node_modules/cobe`)
+Apache 2.0 license.
