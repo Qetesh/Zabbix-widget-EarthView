@@ -5,7 +5,7 @@
 	"name": "Earth View",
 	"namespace": "EarthView",
 	"version": "1.0",
-	"author": "Zabbix",
+	"author": "Qetesh",
 	"description": "Displays hosts as markers on a 3D globe.",
 	"widget": {
 		"js_class": "CWidgetEarthView",
