@@ -44,6 +44,8 @@ class CWidgetEarthView extends CWidget {
 	#last_frame_time = 0;
 	#frame_interval = 1000 / 30;
 	#globe_radius = 0;
+	#globe_scale = 1;
+	#resize_frame_id = null;
 
 	promiseReady() {
 		return super.promiseReady();
@@ -220,6 +222,14 @@ class CWidgetEarthView extends CWidget {
 		return 20000;
 	}
 
+	#computeGlobeScale(cw, ch) {
+		if (!(cw > 0) || !(ch > 0)) {
+			return 1;
+		}
+
+		return Math.min(cw, ch) / ch;
+	}
+
 	#initGlobe() {
 		const container = this.#container;
 		const cw = container.offsetWidth;
@@ -236,6 +246,7 @@ class CWidgetEarthView extends CWidget {
 		this.#canvas.style.height = `${ch}px`;
 
 		this.#globe_radius = Math.min(cw, ch) / 2;
+		this.#globe_scale = this.#computeGlobeScale(cw, ch);
 
 		if (this.#globe) {
 			this.#globe.destroy();
@@ -260,7 +271,7 @@ class CWidgetEarthView extends CWidget {
 			glowColor: theme.glowColor,
 			markers: this.#cached_globe_markers,
 			markerElevation: 0,
-			scale: 1,
+			scale: this.#globe_scale,
 			offset: [0, 0]
 		});
 
@@ -495,9 +506,11 @@ class CWidgetEarthView extends CWidget {
 			+ cos_phi * cos_theta * point[2]) >= 0
 			|| projected_x * projected_x + projected_y * projected_y >= 0.64;
 
+		const scale = this.#globe_scale;
+
 		return {
-			x: ((projected_x / (width / height)) + 1) * 0.5 * width,
-			y: ((-projected_y) + 1) * 0.5 * height,
+			x: (((projected_x * scale) / (width / height)) + 1) * 0.5 * width,
+			y: ((-projected_y * scale) + 1) * 0.5 * height,
 			visible
 		};
 	}
@@ -894,23 +907,70 @@ class CWidgetEarthView extends CWidget {
 		}
 	}
 
-	onResize() {
-		super.onResize();
-
-		if (this._state === WIDGET_STATE_ACTIVE && this.#container) {
-			this.#removeHintBoxes();
-			this.#stopAnimationLoop();
-
-			if (this.#globe) {
-				this.#globe.destroy();
-				this.#globe = null;
-			}
-
-			this.#initGlobe();
+	#cancelResizeUpdate() {
+		if (this.#resize_frame_id !== null) {
+			cancelAnimationFrame(this.#resize_frame_id);
+			this.#resize_frame_id = null;
 		}
 	}
 
+	#scheduleResizeUpdate() {
+		if (this.#resize_frame_id !== null) {
+			return;
+		}
+
+		this.#resize_frame_id = requestAnimationFrame(() => {
+			this.#resize_frame_id = null;
+			this.#applyResizeUpdate();
+		});
+	}
+
+	#applyResizeUpdate() {
+		if (this._state !== WIDGET_STATE_ACTIVE || !this.#container) {
+			return;
+		}
+
+		const cw = this.#container.offsetWidth;
+		const ch = this.#container.offsetHeight;
+
+		if (cw <= 0 || ch <= 0) {
+			return;
+		}
+
+		if (this.#globe === null) {
+			this.#initGlobe();
+			return;
+		}
+
+		this.#canvas.style.width = `${cw}px`;
+		this.#canvas.style.height = `${ch}px`;
+
+		this.#globe_radius = Math.min(cw, ch) / 2;
+		this.#globe_scale = this.#computeGlobeScale(cw, ch);
+
+		this.#globe.update({
+			width: cw,
+			height: ch,
+			scale: this.#globe_scale
+		});
+
+		this.#projectAllMarkers();
+		this.#requestRender();
+	}
+
+	onResize() {
+		super.onResize();
+
+		if (this._state !== WIDGET_STATE_ACTIVE || !this.#container) {
+			return;
+		}
+
+		this.#removeHintBoxes();
+		this.#scheduleResizeUpdate();
+	}
+
 	onClearContents() {
+		this.#cancelResizeUpdate();
 		this.#stopAnimationLoop();
 
 		if (this.#globe) {
@@ -941,6 +1001,7 @@ class CWidgetEarthView extends CWidget {
 	}
 
 	onDestroy() {
+		this.#cancelResizeUpdate();
 		this.#stopAnimationLoop();
 		this.#destroyThemeWatcher();
 	}
